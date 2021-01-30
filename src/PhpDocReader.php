@@ -3,6 +3,7 @@
 namespace Loot\PhpDocReader;
 
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\True_;
 
 final class PhpDocReader
 {
@@ -37,7 +38,6 @@ final class PhpDocReader
     /**
      * PhpDocReader constructor.
      * @param string $comment
-     * @throws \Exception
      */
     public function __construct(string $comment)
     {
@@ -70,11 +70,7 @@ final class PhpDocReader
         /** reindex array */
         $this->lines = array_values($lines);
 
-        /** destructuration */
-        $annotations = array_map([$this, 'destructuration'], $lines);
-
-        /** reindex array */
-        $this->annotations = $annotations;
+        $this->annotations = array_map([$this, 'destructuration'], $lines);
     }
 
     /**
@@ -97,6 +93,11 @@ final class PhpDocReader
         return $this->annotations;
     }
 
+    public function getLines(): array
+    {
+        return $this->lines;
+    }
+
     /**
      * @param string $line
      * @return string
@@ -112,6 +113,14 @@ final class PhpDocReader
     {
         $chunk = explode(' ', $line);
         $key = array_shift($chunk);
+
+        if (!$this->lineHasParam($key)) {
+            $phpDocLine = new PhpDocLine('');
+            $phpDocLine->setDescription($line);
+
+            return $phpDocLine;
+        }
+
         $phpDocLine = new PhpDocLine($key);
         $type = array_shift($chunk);
 
@@ -120,7 +129,7 @@ final class PhpDocReader
             $variableName = array_shift($chunk);
             $value = implode(' ', $chunk);
 
-            if ($this->stringIsVariable($variableName)) {
+            if ($variableName && $this->stringIsVariable($variableName)) {
                 $phpDocLine->setVariable($variableName);
                 $phpDocLine->setDescription($value);
             } else {
@@ -180,6 +189,21 @@ final class PhpDocReader
         }
 
         throw new \RuntimeException('Annotation ['.$name.'] not found');
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasAnnotation(string $name): bool
+    {
+        foreach ($this->getAnnotations() as $annotation) {
+            if ($annotation->getName() === $name || $annotation->getName() === ('@'.$name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

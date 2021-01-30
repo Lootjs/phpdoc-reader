@@ -71,6 +71,15 @@ final class PhpDocLine
         return $this->description;
     }
 
+    public function getRouteId()
+    {
+        if (is_array($this->description)) {
+            return $this->description['method'].':'.$this->description['route'];
+        }
+
+        return '';
+    }
+
     public function setVariable(string $variable)
     {
         $this->variable = $variable;
