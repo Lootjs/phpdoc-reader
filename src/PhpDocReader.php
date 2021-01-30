@@ -2,7 +2,6 @@
 
 namespace Loot\PhpDocReader;
 
-use http\Exception\RuntimeException;
 use Illuminate\Support\Str;
 
 final class PhpDocReader
@@ -79,7 +78,7 @@ final class PhpDocReader
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getDescription(): ?string
     {
