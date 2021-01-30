@@ -1,0 +1,18 @@
+{
+    "name": "loot/phpdoc-reader",
+    "description": "Package can parse phpdoc comments",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": false,
+    "authors": [
+        {
+            "name": "Loot",
+            "email": "77028277827@yandex.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Loot\\PhpDocReader\\": "src"
+        }
+    }
+}
