@@ -170,6 +170,7 @@ final class PhpDocReader
 
     /**
      * @param string $name
+     * @return PhpDocLine
      */
     public function getAnnotation(string $name)
     {
@@ -184,8 +185,9 @@ final class PhpDocReader
 
     /**
      * @param string $name
+     * @return array
      */
-    public function getAnnotationsByName(string $name)
+    public function getAnnotationsByName(string $name): array
     {
         return array_filter($this->getAnnotations(), function (PhpDocLine $annotation) use ($name) {
             if ($annotation->getName() === $name || $annotation->getName() === ('@'.$name)) {
