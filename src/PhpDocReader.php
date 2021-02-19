@@ -167,7 +167,7 @@ final class PhpDocReader
      * @param string $type
      * @return bool
      */
-    private function stringIsType(string $type): bool
+    private function stringIsType(?string $type): bool
     {
         if (class_exists($type) || in_array($type, $this->nativeTypes)) {
             return true;
